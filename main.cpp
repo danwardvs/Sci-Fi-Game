@@ -5,11 +5,13 @@
 BITMAP* buffer;
 BITMAP* planet;
 BITMAP* spaceship;
+BITMAP* character;
 
 bool close_button_pressed;
 
 int scroll_x;
 int scroll_y;
+int player_x=200;
 
 // FPS System
 volatile int ticks = 0;
@@ -56,6 +58,11 @@ void abort_on_error(const char *message){
 }
 
 void update(){
+    if(key[KEY_LEFT])
+        player_x-=5;
+    if(key[KEY_RIGHT])
+        player_x+=5;
+
 
 
 
@@ -64,6 +71,7 @@ void update(){
 void draw(){
     draw_sprite(buffer, planet,0,0);
     draw_sprite(buffer, spaceship,200+scroll_x,100);
+    draw_sprite(buffer, character,player_x,500);
 
 
     draw_sprite(screen,buffer,0,0);
@@ -98,6 +106,8 @@ void setup(){
       abort_on_error("Cannot find image planet.png\nPlease check your files and try again");
     if (!(spaceship = load_bitmap("spaceship.png", NULL)))
       abort_on_error("Cannot find image spaceship.png\nPlease check your files and try again");
+    if (!(character = load_bitmap("character.png", NULL)))
+      abort_on_error("Cannot find image character.png\nPlease check your files and try again");
 }
 
 
