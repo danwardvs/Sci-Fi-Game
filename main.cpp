@@ -58,12 +58,13 @@ void abort_on_error(const char *message){
 }
 
 void update(){
-    if(key[KEY_LEFT])
-        if(player_x<100) scroll_x+=5;
-       else player_x-=5;
-    if(key[KEY_RIGHT]){
-       if(player_x>SCREEN_W-100) scroll_x-=5;
-       else player_x+=5;
+    if(key[KEY_LEFT] && scroll_x<1024){
+        if(player_x<100){ scroll_x+=5;
+        }else player_x-=5;
+    }
+    if(key[KEY_RIGHT] && scroll_x<-1024){
+       if(player_x>SCREEN_W-100){ scroll_x-=5;
+       }else player_x+=5;
     }
 
 
@@ -74,7 +75,11 @@ void update(){
 }
 
 void draw(){
-    draw_sprite(buffer, planet,0,0);
+    draw_sprite(buffer, planet,scroll_x,0);
+    draw_sprite(buffer, planet,scroll_x+1024,0);
+    draw_sprite(buffer, planet,scroll_x+1024*2,0);
+    draw_sprite(buffer, planet,scroll_x+1024*3,0);
+    draw_sprite(buffer, planet,scroll_x-1024,0);
     draw_sprite(buffer, spaceship,200+scroll_x,100);
     draw_sprite(buffer, character,player_x,500);
 
