@@ -5,13 +5,18 @@
 BITMAP* buffer;
 BITMAP* planet;
 BITMAP* spaceship;
-BITMAP* character;
+BITMAP* character_left;
+BITMAP* character_right;
+BITMAP* character_gun_right;
+BITMAP* character_gun_left;
 
 bool close_button_pressed;
 
 int scroll_x;
 int scroll_y;
 int player_x=200;
+int player_direction=1;
+int weapon;
 
 // FPS System
 volatile int ticks = 0;
@@ -59,12 +64,18 @@ void abort_on_error(const char *message){
 
 void update(){
 
+    if(key[KEY_TILDE])weapon=0;
+    if(key[KEY_1])weapon=1;
+
+
 
     if(key[KEY_LEFT] ){
+        player_direction=1;
         if(player_x<100 && scroll_x<1024){ scroll_x+=5;
         }else player_x-=5;
     }
     if(key[KEY_RIGHT]){
+        player_direction=2;
        if(player_x>SCREEN_W-100 && scroll_x>-1024){ scroll_x-=5;
        }else player_x+=5;
     }
@@ -83,8 +94,11 @@ void draw(){
     draw_sprite(buffer, planet,scroll_x+1024*3,0);
     draw_sprite(buffer, planet,scroll_x-1024,0);
     draw_sprite(buffer, spaceship,200+scroll_x,100);
-    draw_sprite(buffer, character,player_x,500);
 
+    if(player_direction==1 && weapon==0)draw_sprite(buffer, character_left,player_x,500);
+    if(player_direction==2 && weapon==0)draw_sprite(buffer, character_right,player_x,500);
+    if(player_direction==1 && weapon==1)draw_sprite(buffer, character_gun_left,player_x,500);
+    if(player_direction==2 && weapon==1)draw_sprite(buffer, character_gun_right,player_x,500);
 
     draw_sprite(screen,buffer,0,0);
 }
@@ -116,10 +130,21 @@ void setup(){
 
     if (!(planet = load_bitmap("planet.png", NULL)))
       abort_on_error("Cannot find image planet.png\nPlease check your files and try again");
+
     if (!(spaceship = load_bitmap("spaceship.png", NULL)))
       abort_on_error("Cannot find image spaceship.png\nPlease check your files and try again");
-    if (!(character = load_bitmap("character.png", NULL)))
-      abort_on_error("Cannot find image character.png\nPlease check your files and try again");
+
+    if (!(character_right = load_bitmap("character_right.png", NULL)))
+      abort_on_error("Cannot find image character_right.png\nPlease check your files and try again");
+
+    if (!(character_left = load_bitmap("character_left.png", NULL)))
+      abort_on_error("Cannot find image character_gun_left.png\nPlease check your files and try again");
+
+    if (!(character_gun_left = load_bitmap("character_gun_left.png", NULL)))
+      abort_on_error("Cannot find image character_left.png\nPlease check your files and try again");
+
+    if (!(character_gun_right = load_bitmap("character_gun_right.png", NULL)))
+      abort_on_error("Cannot find image character_gun_right.png\nPlease check your files and try again");
 }
 
 
