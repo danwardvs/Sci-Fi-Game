@@ -9,6 +9,8 @@ BITMAP* character_left;
 BITMAP* character_right;
 BITMAP* character_gun_right;
 BITMAP* character_gun_left;
+BITMAP* character_shoot_1_right;
+BITMAP* character_shoot_1_left;
 
 bool close_button_pressed;
 
@@ -17,6 +19,7 @@ int scroll_y;
 int player_x=200;
 int player_direction=1;
 int weapon;
+bool shooting;
 
 // FPS System
 volatile int ticks = 0;
@@ -66,7 +69,8 @@ void update(){
 
     if(key[KEY_TILDE])weapon=0;
     if(key[KEY_1])weapon=1;
-
+    if(key[KEY_SPACE])shooting=true;
+    else shooting=false;
 
 
     if(key[KEY_LEFT] ){
@@ -97,8 +101,10 @@ void draw(){
 
     if(player_direction==1 && weapon==0)draw_sprite(buffer, character_left,player_x,500);
     if(player_direction==2 && weapon==0)draw_sprite(buffer, character_right,player_x,500);
-    if(player_direction==1 && weapon==1)draw_sprite(buffer, character_gun_left,player_x,500);
-    if(player_direction==2 && weapon==1)draw_sprite(buffer, character_gun_right,player_x,500);
+    if(player_direction==1 && weapon==1 && !shooting)draw_sprite(buffer, character_gun_left,player_x,500);
+    if(player_direction==2 && weapon==1 && !shooting)draw_sprite(buffer, character_gun_right,player_x,500);
+    if(player_direction==1 && weapon==1 && shooting)draw_sprite(buffer, character_shoot_1_left,player_x,500);
+    if(player_direction==2 && weapon==1 && shooting)draw_sprite(buffer, character_shoot_1_right,player_x,500);
 
     draw_sprite(screen,buffer,0,0);
 }
@@ -145,6 +151,12 @@ void setup(){
 
     if (!(character_gun_right = load_bitmap("character_gun_right.png", NULL)))
       abort_on_error("Cannot find image character_gun_right.png\nPlease check your files and try again");
+
+    if (!(character_shoot_1_right = load_bitmap("character_shoot_1_right.png", NULL)))
+      abort_on_error("Cannot find image character_shoot_1_right.png\nPlease check your files and try again");
+
+    if (!(character_shoot_1_left = load_bitmap("character_shoot_1_left.png", NULL)))
+      abort_on_error("Cannot find image character_shoot_1_left.png\nPlease check your files and try again");
 }
 
 
