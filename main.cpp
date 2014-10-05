@@ -58,12 +58,14 @@ void abort_on_error(const char *message){
 }
 
 void update(){
-    if(key[KEY_LEFT] && scroll_x<1024){
-        if(player_x<100){ scroll_x+=5;
+
+
+    if(key[KEY_LEFT] ){
+        if(player_x<100 && scroll_x<1024){ scroll_x+=5;
         }else player_x-=5;
     }
-    if(key[KEY_RIGHT] && scroll_x>-1024){
-       if(player_x>SCREEN_W-100){ scroll_x-=5;
+    if(key[KEY_RIGHT]){
+       if(player_x>SCREEN_W-100 && scroll_x>-1024){ scroll_x-=5;
        }else player_x+=5;
     }
 
