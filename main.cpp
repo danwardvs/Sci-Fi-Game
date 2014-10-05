@@ -2,6 +2,9 @@
 #include<alpng.h>
 #include<time.h>
 
+#define GAME 1
+#define SPACEMAP 2
+
 BITMAP* buffer;
 BITMAP* planet;
 BITMAP* spaceship;
@@ -11,9 +14,11 @@ BITMAP* character_gun_right;
 BITMAP* character_gun_left;
 BITMAP* character_shoot_1_right;
 BITMAP* character_shoot_1_left;
+BITMAP* spacemap_overlay;
 
 bool close_button_pressed;
 
+int GAME_STATE=SPACEMAP;
 int scroll_x;
 int scroll_y;
 int player_x=200;
@@ -67,23 +72,29 @@ void abort_on_error(const char *message){
 
 void update(){
 
-    if(key[KEY_TILDE])weapon=0;
-    if(key[KEY_1])weapon=1;
-    if(key[KEY_SPACE])shooting=true;
-    else shooting=false;
+    if(GAME_STATE==GAME){
+        if(key[KEY_TILDE])weapon=0;
+        if(key[KEY_1])weapon=1;
+        if(key[KEY_SPACE])shooting=true;
+        else shooting=false;
 
 
-    if(key[KEY_LEFT] ){
-        player_direction=1;
-        if(player_x<100 && scroll_x<1024){ scroll_x+=5;
-        }else player_x-=5;
+        if(key[KEY_LEFT] ){
+            player_direction=1;
+            if(player_x<100 && scroll_x<1024){
+                scroll_x+=5;
+            }else player_x-=5;
+        }
+        if(key[KEY_RIGHT]){
+            player_direction=2;
+            if(player_x>SCREEN_W-100 && scroll_x>-1024){
+                scroll_x-=5;
+            }else player_x+=5;
+        }
     }
-    if(key[KEY_RIGHT]){
-        player_direction=2;
-       if(player_x>SCREEN_W-100 && scroll_x>-1024){ scroll_x-=5;
-       }else player_x+=5;
-    }
+    if(GAME_STATE==SPACEMAP){
 
+    }
 
 
 
@@ -92,20 +103,27 @@ void update(){
 }
 
 void draw(){
-    draw_sprite(buffer, planet,scroll_x,0);
-    draw_sprite(buffer, planet,scroll_x+1024,0);
-    draw_sprite(buffer, planet,scroll_x+1024*2,0);
-    draw_sprite(buffer, planet,scroll_x+1024*3,0);
-    draw_sprite(buffer, planet,scroll_x-1024,0);
-    draw_sprite(buffer, spaceship,200+scroll_x,100);
 
-    if(player_direction==1 && weapon==0)draw_sprite(buffer, character_left,player_x,500);
-    if(player_direction==2 && weapon==0)draw_sprite(buffer, character_right,player_x,500);
-    if(player_direction==1 && weapon==1 && !shooting)draw_sprite(buffer, character_gun_left,player_x,500);
-    if(player_direction==2 && weapon==1 && !shooting)draw_sprite(buffer, character_gun_right,player_x,500);
-    if(player_direction==1 && weapon==1 && shooting)draw_sprite(buffer, character_shoot_1_left,player_x,500);
-    if(player_direction==2 && weapon==1 && shooting)draw_sprite(buffer, character_shoot_1_right,player_x,500);
+    if(GAME_STATE==GAME){
+        draw_sprite(buffer, planet,scroll_x,0);
+        draw_sprite(buffer, planet,scroll_x+1024,0);
+        draw_sprite(buffer, planet,scroll_x+1024*2,0);
+        draw_sprite(buffer, planet,scroll_x+1024*3,0);
+        draw_sprite(buffer, planet,scroll_x-1024,0);
+        draw_sprite(buffer, spaceship,200+scroll_x,100);
 
+        if(player_direction==1 && weapon==0)draw_sprite(buffer, character_left,player_x,500);
+        if(player_direction==2 && weapon==0)draw_sprite(buffer, character_right,player_x,500);
+        if(player_direction==1 && weapon==1 && !shooting)draw_sprite(buffer, character_gun_left,player_x,500);
+        if(player_direction==2 && weapon==1 && !shooting)draw_sprite(buffer, character_gun_right,player_x,500);
+        if(player_direction==1 && weapon==1 && shooting)draw_sprite(buffer, character_shoot_1_left,player_x,500);
+        if(player_direction==2 && weapon==1 && shooting)draw_sprite(buffer, character_shoot_1_right,player_x,500);
+    }
+
+    if(GAME_STATE==SPACEMAP){
+        draw_sprite(buffer, spacemap_overlay,0,0);
+
+    }
     draw_sprite(screen,buffer,0,0);
 }
 
@@ -157,6 +175,9 @@ void setup(){
 
     if (!(character_shoot_1_left = load_bitmap("character_shoot_1_left.png", NULL)))
       abort_on_error("Cannot find image character_shoot_1_left.png\nPlease check your files and try again");
+
+    if (!(spacemap_overlay = load_bitmap("spacemap_overlay.png", NULL)))
+      abort_on_error("Cannot find image spacemap_overlay.png\nPlease check your files and try again");
 }
 
 
