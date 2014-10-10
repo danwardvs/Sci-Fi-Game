@@ -15,12 +15,10 @@ BITMAP* character_gun_left;
 BITMAP* character_shoot_1_right;
 BITMAP* character_shoot_1_left;
 BITMAP* spacemap_overlay;
-BITMAP* spacemap_space;
-BITMAP* cursor;
 
 bool close_button_pressed;
 
-int GAME_STATE=SPACEMAP;
+int GAME_STATE=GAME;
 int scroll_x;
 int scroll_y;
 int player_x=200;
@@ -123,11 +121,9 @@ void draw(){
     }
 
     if(GAME_STATE==SPACEMAP){
-        draw_sprite(buffer, spacemap_space,0,0);
         draw_sprite(buffer, spacemap_overlay,0,0);
 
     }
-    draw_sprite(buffer, cursor,mouse_x-9,mouse_y-9);
     draw_sprite(screen,buffer,0,0);
 }
 
@@ -182,13 +178,6 @@ void setup(){
 
     if (!(spacemap_overlay = load_bitmap("spacemap_overlay.png", NULL)))
       abort_on_error("Cannot find image spacemap_overlay.png\nPlease check your files and try again");
-
-    if (!(spacemap_space = load_bitmap("spacemap_space.png", NULL)))
-      abort_on_error("Cannot find image spacemap_space.png\nPlease check your files and try again");
-
-
-    if (!(cursor = load_bitmap("cursor.png", NULL)))
-      abort_on_error("Cannot find image cursor.png\nPlease check your files and try again");
 }
 
 

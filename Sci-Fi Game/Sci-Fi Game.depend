@@ -1,5 +1,6 @@
 # depslib dependency file v1.0
-1409779809 source:c:\users\danward\documents\github\sci-fi-game\main.cpp
+1412530160 source:c:\users\danward\documents\github\sci-fi-game\main.cpp
 	<allegro.h>
 	<alpng.h>
+	<time.h>
 
