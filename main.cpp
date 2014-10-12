@@ -21,6 +21,7 @@ BITMAP* planet_nebula;
 BITMAP* planet_darkmore;
 BITMAP* planet_purplax;
 BITMAP* planet_heberion;
+BITMAP* spacemap_descriptor_background;
 
 bool close_button_pressed;
 
@@ -32,6 +33,9 @@ int player_direction=1;
 int weapon;
 int map_scroll_x;
 int map_scroll_y;
+int map_zoom_level;
+int mouse_z_old;
+int planet_selected;
 
 bool shooting;
 
@@ -69,7 +73,11 @@ int random(int newLowest, int newHighest)
   return randomNumber;
 }
 
-
+bool location_clicked(int min_x,int max_x,int min_y,int max_y){
+    if(mouse_x>min_x && mouse_x<max_x && mouse_y>min_y && mouse_y<max_y && mouse_b & 1)
+        return true;
+    else return false;
+}
 //A function to streamline error reporting in file loading
 void abort_on_error(const char *message){
 	 set_window_title("Error!");
@@ -103,7 +111,19 @@ void update(){
         }
     }
     if(GAME_STATE==SPACEMAP){
+        if(mouse_z_old>mouse_z)map_zoom_level++;
+        if(mouse_z_old<mouse_z && map_zoom_level>1)map_zoom_level--;
+        mouse_z_old=mouse_z;
+        if(map_zoom_level==0)map_zoom_level=1;
 
+        if(mouse_x>SCREEN_W-40)map_scroll_x-=2*map_zoom_level;
+        if(mouse_x<40)map_scroll_x+=2*map_zoom_level;
+        if(mouse_y>SCREEN_H-40)map_scroll_y-=2*map_zoom_level;
+        if(mouse_y<40)map_scroll_y+=2*map_zoom_level;
+
+        if(location_clicked((100+map_scroll_x)/map_zoom_level,((100+map_scroll_x)/map_zoom_level)+200/map_zoom_level,(1000+map_scroll_y)/map_zoom_level,((1000+map_scroll_y)/map_zoom_level)+200/map_zoom_level)){
+            planet_selected=1;
+        }
     }
 
 
@@ -131,20 +151,18 @@ void draw(){
     }
 
     if(GAME_STATE==SPACEMAP){
-        draw_sprite(buffer, spacemap_space,0,0);
-
-        if(mouse_x>SCREEN_W-40)map_scroll_x-=5;
-        if(mouse_x<40)map_scroll_x+=5;
-        if(mouse_y>SCREEN_H-40)map_scroll_y-=5;
-        if(mouse_y<40)map_scroll_y+=5;
+        draw_sprite(buffer, spacemap_space,-1536+map_scroll_x/map_zoom_level,-1152+map_scroll_y/map_zoom_level);
 
 
-        draw_sprite(buffer, planet_darkmore,100+map_scroll_x,200+map_scroll_y);
-        draw_sprite(buffer, planet_purplax,700+map_scroll_x,400+map_scroll_y);
-        draw_sprite(buffer, planet_nebula,200+map_scroll_x,400+map_scroll_y);
-        draw_sprite(buffer, planet_heberion,600+map_scroll_x,200+map_scroll_y);
+
+        stretch_sprite(buffer, planet_darkmore,(100+map_scroll_x)/map_zoom_level,(1000+map_scroll_y)/map_zoom_level,200/map_zoom_level,200/map_zoom_level);
+        stretch_sprite(buffer, planet_purplax,(700+map_scroll_x)/map_zoom_level,(500+map_scroll_y)/map_zoom_level,200/map_zoom_level,200/map_zoom_level);
+        stretch_sprite(buffer, planet_nebula,(200+map_scroll_x)/map_zoom_level,(2000+map_scroll_y)/map_zoom_level,200/map_zoom_level,200/map_zoom_level);
+        stretch_sprite(buffer, planet_heberion,(600+map_scroll_x)/map_zoom_level,(-500+map_scroll_y)/map_zoom_level,200/map_zoom_level,200/map_zoom_level);
 
         draw_sprite(buffer, spacemap_overlay,0,0);
+
+        if(planet_selected!=0)draw_sprite(buffer, spacemap_descriptor_background,20,40);
 
 
     }
@@ -221,6 +239,9 @@ void setup(){
 
     if (!(planet_purplax = load_bitmap("planet_purplax.png", NULL)))
       abort_on_error("Cannot find image planet_purplax.png\nPlease check your files and try again");
+
+    if (!(spacemap_descriptor_background = load_bitmap("spacemap_descriptor_background.png", NULL)))
+      abort_on_error("Cannot find image spacemap_descriptor_background.png\nPlease check your files and try again");
 }
 
 
