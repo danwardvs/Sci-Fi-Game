@@ -44,7 +44,7 @@ int map_scroll_y;
 int map_zoom_level;
 int mouse_z_old;
 int planet_selected;
-int spacemap_scanner_angle;
+float spacemap_scanner_angle;
 
 bool shooting;
 
@@ -120,7 +120,8 @@ void update(){
         }
     }
     if(GAME_STATE==SPACEMAP){
-        spacemap_scanner_angle++;
+        spacemap_scanner_angle+=0.2;
+        if(spacemap_scanner_angle==255)spacemap_scanner_angle=0;
         if(mouse_z_old>mouse_z)map_zoom_level++;
         if(mouse_z_old<mouse_z && map_zoom_level>1)map_zoom_level--;
         mouse_z_old=mouse_z;
@@ -190,7 +191,7 @@ void draw(){
             if(planet_selected==3)textprintf_ex(buffer,descriptor,45,75,makecol(0,0,0),-1,"Planet: Nebula");
             if(planet_selected==4)textprintf_ex(buffer,descriptor,45,75,makecol(0,0,0),-1,"Planet: Heberion");
         }
-        rotate_sprite(buffer, spacemap_scanner, 1024/2, 0, itofix(spacemap_scanner_angle));
+        rotate_sprite(buffer, spacemap_scanner, 512, -384, itofix(spacemap_scanner_angle));
         draw_sprite(buffer, spacemap_overlay,0,0);
 
 
