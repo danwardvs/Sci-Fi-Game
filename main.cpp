@@ -17,6 +17,10 @@ BITMAP* character_shoot_1_left;
 BITMAP* spacemap_overlay;
 BITMAP* spacemap_space;
 BITMAP* cursor;
+BITMAP* planet_nebula;
+BITMAP* planet_darkmore;
+BITMAP* planet_purplax;
+BITMAP* planet_heberion;
 
 bool close_button_pressed;
 
@@ -26,7 +30,11 @@ int scroll_y;
 int player_x=200;
 int player_direction=1;
 int weapon;
+int map_scroll_x;
+int map_scroll_y;
+
 bool shooting;
+
 
 // FPS System
 volatile int ticks = 0;
@@ -124,7 +132,20 @@ void draw(){
 
     if(GAME_STATE==SPACEMAP){
         draw_sprite(buffer, spacemap_space,0,0);
+
+        if(mouse_x>SCREEN_W-40)map_scroll_x-=5;
+        if(mouse_x<40)map_scroll_x+=5;
+        if(mouse_y>SCREEN_H-40)map_scroll_y-=5;
+        if(mouse_y<40)map_scroll_y+=5;
+
+
+        draw_sprite(buffer, planet_darkmore,100+map_scroll_x,200+map_scroll_y);
+        draw_sprite(buffer, planet_purplax,700+map_scroll_x,400+map_scroll_y);
+        draw_sprite(buffer, planet_nebula,200+map_scroll_x,400+map_scroll_y);
+        draw_sprite(buffer, planet_heberion,600+map_scroll_x,200+map_scroll_y);
+
         draw_sprite(buffer, spacemap_overlay,0,0);
+
 
     }
     draw_sprite(buffer, cursor,mouse_x-9,mouse_y-9);
@@ -186,9 +207,20 @@ void setup(){
     if (!(spacemap_space = load_bitmap("spacemap_space.png", NULL)))
       abort_on_error("Cannot find image spacemap_space.png\nPlease check your files and try again");
 
-
     if (!(cursor = load_bitmap("cursor.png", NULL)))
       abort_on_error("Cannot find image cursor.png\nPlease check your files and try again");
+
+    if (!(planet_heberion = load_bitmap("planet_heberion.png", NULL)))
+      abort_on_error("Cannot find image planet_heberion.png\nPlease check your files and try again");
+
+    if (!(planet_darkmore = load_bitmap("planet_darkmore.png", NULL)))
+      abort_on_error("Cannot find image planet_darkmore.png\nPlease check your files and try again");
+
+    if (!(planet_nebula = load_bitmap("planet_nebula.png", NULL)))
+      abort_on_error("Cannot find image planet_nebula.png\nPlease check your files and try again");
+
+    if (!(planet_purplax = load_bitmap("planet_purplax.png", NULL)))
+      abort_on_error("Cannot find image planet_purplax.png\nPlease check your files and try again");
 }
 
 
