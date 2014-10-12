@@ -5,6 +5,13 @@
 #define GAME 1
 #define SPACEMAP 2
 
+FONT* descriptor;
+FONT* f1;
+FONT* f2;
+FONT* f3;
+FONT* f4;
+FONT* f5;
+
 BITMAP* buffer;
 BITMAP* planet;
 BITMAP* spaceship;
@@ -22,6 +29,7 @@ BITMAP* planet_darkmore;
 BITMAP* planet_purplax;
 BITMAP* planet_heberion;
 BITMAP* spacemap_descriptor_background;
+BITMAP* spacemap_scanner;
 
 bool close_button_pressed;
 
@@ -36,6 +44,7 @@ int map_scroll_y;
 int map_zoom_level;
 int mouse_z_old;
 int planet_selected;
+int spacemap_scanner_angle;
 
 bool shooting;
 
@@ -111,6 +120,7 @@ void update(){
         }
     }
     if(GAME_STATE==SPACEMAP){
+        spacemap_scanner_angle++;
         if(mouse_z_old>mouse_z)map_zoom_level++;
         if(mouse_z_old<mouse_z && map_zoom_level>1)map_zoom_level--;
         mouse_z_old=mouse_z;
@@ -124,6 +134,18 @@ void update(){
         if(location_clicked((100+map_scroll_x)/map_zoom_level,((100+map_scroll_x)/map_zoom_level)+200/map_zoom_level,(1000+map_scroll_y)/map_zoom_level,((1000+map_scroll_y)/map_zoom_level)+200/map_zoom_level)){
             planet_selected=1;
         }
+        if(location_clicked((700+map_scroll_x)/map_zoom_level,((700+map_scroll_x)/map_zoom_level)+200/map_zoom_level,(500+map_scroll_y)/map_zoom_level,((500+map_scroll_y)/map_zoom_level)+200/map_zoom_level)){
+            planet_selected=2;
+        }
+        if(location_clicked((200+map_scroll_x)/map_zoom_level,((200+map_scroll_x)/map_zoom_level)+200/map_zoom_level,(2000+map_scroll_y)/map_zoom_level,((2000+map_scroll_y)/map_zoom_level)+200/map_zoom_level)){
+            planet_selected=3;
+        }
+
+        if(location_clicked((600+map_scroll_x)/map_zoom_level,((600+map_scroll_x)/map_zoom_level)+200/map_zoom_level,(-500+map_scroll_y)/map_zoom_level,((-500+map_scroll_y)/map_zoom_level)+200/map_zoom_level)){
+            planet_selected=4;
+        }
+
+
     }
 
 
@@ -160,9 +182,18 @@ void draw(){
         stretch_sprite(buffer, planet_nebula,(200+map_scroll_x)/map_zoom_level,(2000+map_scroll_y)/map_zoom_level,200/map_zoom_level,200/map_zoom_level);
         stretch_sprite(buffer, planet_heberion,(600+map_scroll_x)/map_zoom_level,(-500+map_scroll_y)/map_zoom_level,200/map_zoom_level,200/map_zoom_level);
 
+
+        if(planet_selected!=0){
+            draw_sprite(buffer, spacemap_descriptor_background,40,80);
+            if(planet_selected==1)textprintf_ex(buffer,descriptor,45,75,makecol(0,0,0),-1,"Planet: Darkmore");
+            if(planet_selected==2)textprintf_ex(buffer,descriptor,45,75,makecol(0,0,0),-1,"Planet: Purplax");
+            if(planet_selected==3)textprintf_ex(buffer,descriptor,45,75,makecol(0,0,0),-1,"Planet: Nebula");
+            if(planet_selected==4)textprintf_ex(buffer,descriptor,45,75,makecol(0,0,0),-1,"Planet: Heberion");
+        }
+        rotate_sprite(buffer, spacemap_scanner, 1024/2, 0, itofix(spacemap_scanner_angle));
         draw_sprite(buffer, spacemap_overlay,0,0);
 
-        if(planet_selected!=0)draw_sprite(buffer, spacemap_descriptor_background,20,40);
+
 
 
     }
@@ -178,6 +209,17 @@ void draw(){
 
 void setup(){
     buffer=create_bitmap(1024,768);
+
+
+    if(!(f1 = load_font("descriptor.pcx", NULL, NULL))){
+        abort_on_error( "Cannot find font descriptor.pcx \n Please check your files and try again");
+    }
+    f2 = extract_font_range(f1, ' ', 'A'-1);
+    f3 = extract_font_range(f1, 'A', 'Z');
+    f4 = extract_font_range(f1, 'Z'+1, 'z');
+
+    //Merge temporary fonts to create "pixelart"
+    descriptor = merge_fonts(f4, f5 = merge_fonts(f2, f3));
 
 
     srand(time(NULL));
@@ -242,6 +284,9 @@ void setup(){
 
     if (!(spacemap_descriptor_background = load_bitmap("spacemap_descriptor_background.png", NULL)))
       abort_on_error("Cannot find image spacemap_descriptor_background.png\nPlease check your files and try again");
+
+    if (!(spacemap_scanner = load_bitmap("spacemap_scanner.png", NULL)))
+      abort_on_error("Cannot find image spacemap_scanner.png\nPlease check your files and try again");
 }
 
 
