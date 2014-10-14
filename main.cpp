@@ -32,6 +32,7 @@ BITMAP* planet_heberion;
 BITMAP* spacemap_descriptor_background;
 BITMAP* spacemap_scanner;
 BITMAP* spacemap_set_course;
+BITMAP* environment_darkmore;
 
 bool close_button_pressed;
 
@@ -47,6 +48,8 @@ int map_zoom_level;
 int mouse_z_old;
 int planet_selected;
 float spacemap_scanner_angle;
+
+int step;
 
 bool shooting;
 
@@ -100,6 +103,8 @@ void abort_on_error(const char *message){
 }
 
 void update(){
+    poll_joystick();
+    step++;
 
     if(GAME_STATE==GAME){
         if(key[KEY_TILDE])weapon=0;
@@ -124,15 +129,21 @@ void update(){
     if(GAME_STATE==SPACEMAP){
         spacemap_scanner_angle+=0.2;
         if(spacemap_scanner_angle==255)spacemap_scanner_angle=0;
-        if(mouse_z_old>mouse_z)map_zoom_level++;
-        if(mouse_z_old<mouse_z && map_zoom_level>1)map_zoom_level--;
+        if(mouse_z_old>mouse_z || joy[0].button[0].b && step>4){
+            map_zoom_level++;
+            step=0;
+        }
+        if(mouse_z_old<mouse_z && map_zoom_level>1 || joy[0].button[3].b && step>4){
+            map_zoom_level--;
+            step=0;
+        }
         mouse_z_old=mouse_z;
         if(map_zoom_level==0)map_zoom_level=1;
 
-        if(mouse_x>SCREEN_W-40)map_scroll_x-=2*map_zoom_level;
-        if(mouse_x<40)map_scroll_x+=2*map_zoom_level;
-        if(mouse_y>SCREEN_H-40)map_scroll_y-=2*map_zoom_level;
-        if(mouse_y<40)map_scroll_y+=2*map_zoom_level;
+        if(mouse_x>SCREEN_W-40 || key[KEY_RIGHT] || joy[0].stick[0].axis[0].d2)map_scroll_x-=2*map_zoom_level;
+        if(mouse_x<40 || key[KEY_LEFT] || joy[0].stick[0].axis[0].d1)map_scroll_x+=2*map_zoom_level;
+        if(mouse_y>SCREEN_H-40 || key[KEY_DOWN] || joy[0].stick[0].axis[1].d2)map_scroll_y-=2*map_zoom_level;
+        if(mouse_y<40 || key[KEY_UP] || joy[0].stick[0].axis[1].d1)map_scroll_y+=2*map_zoom_level;
 
         if(location_clicked((100+map_scroll_x)/map_zoom_level,((100+map_scroll_x)/map_zoom_level)+200/map_zoom_level,(1000+map_scroll_y)/map_zoom_level,((1000+map_scroll_y)/map_zoom_level)+200/map_zoom_level)){
             planet_selected=1;
@@ -164,6 +175,7 @@ void update(){
 void draw(){
 
     if(GAME_STATE==GAME){
+        if(planet_selected==1)planet=environment_darkmore;
         draw_sprite(buffer, planet,scroll_x,0);
         draw_sprite(buffer, planet,scroll_x+1024,0);
         draw_sprite(buffer, planet,scroll_x+1024*2,0);
@@ -325,6 +337,9 @@ void setup(){
 
     if (!(spacemap_set_course = load_bitmap("spacemap_set_course.png", NULL)))
       abort_on_error("Cannot find image spacemap_set_course.png\nPlease check your files and try again");
+
+    if (!(environment_darkmore = load_bitmap("environment_darkmore.png", NULL)))
+      abort_on_error("Cannot find image environment_darkmore.png\nPlease check your files and try again");
 }
 
 
@@ -340,6 +355,7 @@ int main(){
   install_keyboard();
   install_mouse();
   set_color_depth(32);
+  install_joystick(JOY_TYPE_AUTODETECT);
 
 
   set_gfx_mode(GFX_AUTODETECT_WINDOWED,1024,768, 0, 0);
