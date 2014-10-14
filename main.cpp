@@ -30,6 +30,7 @@ BITMAP* planet_purplax;
 BITMAP* planet_heberion;
 BITMAP* spacemap_descriptor_background;
 BITMAP* spacemap_scanner;
+BITMAP* spacemap_set_course;
 
 bool close_button_pressed;
 
@@ -141,11 +142,12 @@ void update(){
         if(location_clicked((200+map_scroll_x)/map_zoom_level,((200+map_scroll_x)/map_zoom_level)+200/map_zoom_level,(2000+map_scroll_y)/map_zoom_level,((2000+map_scroll_y)/map_zoom_level)+200/map_zoom_level)){
             planet_selected=3;
         }
-
         if(location_clicked((600+map_scroll_x)/map_zoom_level,((600+map_scroll_x)/map_zoom_level)+200/map_zoom_level,(-500+map_scroll_y)/map_zoom_level,((-500+map_scroll_y)/map_zoom_level)+200/map_zoom_level)){
             planet_selected=4;
         }
-
+        if(mouse_b & 1 && !location_clicked((100+map_scroll_x)/map_zoom_level,((100+map_scroll_x)/map_zoom_level)+200/map_zoom_level,(1000+map_scroll_y)/map_zoom_level,((1000+map_scroll_y)/map_zoom_level)+200/map_zoom_level) && !location_clicked((700+map_scroll_x)/map_zoom_level,((700+map_scroll_x)/map_zoom_level)+200/map_zoom_level,(500+map_scroll_y)/map_zoom_level,((500+map_scroll_y)/map_zoom_level)+200/map_zoom_level) && !location_clicked((200+map_scroll_x)/map_zoom_level,((200+map_scroll_x)/map_zoom_level)+200/map_zoom_level,(2000+map_scroll_y)/map_zoom_level,((2000+map_scroll_y)/map_zoom_level)+200/map_zoom_level && !location_clicked((600+map_scroll_x)/map_zoom_level,((600+map_scroll_x)/map_zoom_level)+200/map_zoom_level,(-500+map_scroll_y)/map_zoom_level,((-500+map_scroll_y)/map_zoom_level)+200/map_zoom_level))){
+            planet_selected=0;
+        }
 
     }
 
@@ -175,7 +177,9 @@ void draw(){
 
     if(GAME_STATE==SPACEMAP){
         draw_sprite(buffer, spacemap_space,map_scroll_x/map_zoom_level,map_scroll_y/map_zoom_level);
+        //Just in case!
         draw_sprite(buffer, spacemap_space,0,0);
+
         draw_sprite(buffer, spacemap_space,map_scroll_x/map_zoom_level,map_scroll_y/map_zoom_level);
         draw_sprite(buffer, spacemap_space,map_scroll_x/map_zoom_level,-2304+(map_scroll_y/map_zoom_level));
         draw_sprite(buffer, spacemap_space,map_scroll_x/map_zoom_level,2304+(map_scroll_y/map_zoom_level));
@@ -194,6 +198,7 @@ void draw(){
 
         if(planet_selected!=0){
             draw_sprite(buffer, spacemap_descriptor_background,40,80);
+            draw_sprite(buffer, spacemap_set_course,270,80);
             if(planet_selected==1)textprintf_ex(buffer,descriptor,45,75,makecol(0,0,0),-1,"Planet: Darkmore");
             if(planet_selected==2)textprintf_ex(buffer,descriptor,45,75,makecol(0,0,0),-1,"Planet: Purplax");
             if(planet_selected==3)textprintf_ex(buffer,descriptor,45,75,makecol(0,0,0),-1,"Planet: Nebula");
@@ -296,6 +301,9 @@ void setup(){
 
     if (!(spacemap_scanner = load_bitmap("spacemap_scanner.png", NULL)))
       abort_on_error("Cannot find image spacemap_scanner.png\nPlease check your files and try again");
+
+    if (!(spacemap_set_course = load_bitmap("spacemap_set_course.png", NULL)))
+      abort_on_error("Cannot find image spacemap_set_course.png\nPlease check your files and try again");
 }
 
 
