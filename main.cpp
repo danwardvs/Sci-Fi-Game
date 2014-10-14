@@ -6,6 +6,7 @@
 #define SPACEMAP 2
 
 FONT* descriptor;
+FONT* descriptor_14;
 FONT* f1;
 FONT* f2;
 FONT* f3;
@@ -202,10 +203,16 @@ void draw(){
         if(planet_selected!=0){
             draw_sprite(buffer, spacemap_descriptor_background,40,80);
             draw_sprite(buffer, spacemap_set_course,270,80);
-            if(planet_selected==1)textprintf_ex(buffer,descriptor,45,75,makecol(0,0,0),-1,"Planet: Darkmore");
-            if(planet_selected==2)textprintf_ex(buffer,descriptor,45,75,makecol(0,0,0),-1,"Planet: Purplax");
-            if(planet_selected==3)textprintf_ex(buffer,descriptor,45,75,makecol(0,0,0),-1,"Planet: Nebula");
-            if(planet_selected==4)textprintf_ex(buffer,descriptor,45,75,makecol(0,0,0),-1,"Planet: Heberion");
+            if(planet_selected==1){
+                    textprintf_ex(buffer,descriptor,45,75,makecol(255,0,0),-1,"Planet: Darkmore");
+                    textprintf_ex(buffer,descriptor_14,45,95,makecol(255,0,0),-1,"Atmosphere: Lethal");
+                    textprintf_ex(buffer,descriptor_14,45,110,makecol(255,0,0),-1,"Temperature: -300'c");
+                    textprintf_ex(buffer,descriptor_14,45,125,makecol(255,0,0),-1,"ETA: 120 min");
+                    textprintf_ex(buffer,descriptor_14,45,140,makecol(255,0,0),-1,"Inhabitants: None");
+            }
+            if(planet_selected==2)textprintf_ex(buffer,descriptor,45,75,makecol(255,0,0),-1,"Planet: Purplax");
+            if(planet_selected==3)textprintf_ex(buffer,descriptor,45,75,makecol(255,0,0),-1,"Planet: Nebula");
+            if(planet_selected==4)textprintf_ex(buffer,descriptor,45,75,makecol(255,0,0),-1,"Planet: Heberion");
         }
         rotate_sprite(buffer, spacemap_scanner, 512, -384, itofix(spacemap_scanner_angle));
         draw_sprite(buffer, spacemap_overlay,0,0);
@@ -237,6 +244,17 @@ void setup(){
 
     //Merge temporary fonts to create "pixelart"
     descriptor = merge_fonts(f4, f5 = merge_fonts(f2, f3));
+
+    if(!(f1 = load_font("descriptor_14.pcx", NULL, NULL))){
+        abort_on_error( "Cannot find font descriptor_14.pcx \n Please check your files and try again");
+    }
+    f2 = extract_font_range(f1, ' ', 'A'-1);
+    f3 = extract_font_range(f1, 'A', 'Z');
+    f4 = extract_font_range(f1, 'Z'+1, 'z');
+
+    //Merge temporary fonts to create "pixelart"
+    descriptor_14 = merge_fonts(f4, f5 = merge_fonts(f2, f3));
+
 
 
     srand(time(NULL));
