@@ -145,8 +145,11 @@ void update(){
         if(location_clicked((600+map_scroll_x)/map_zoom_level,((600+map_scroll_x)/map_zoom_level)+200/map_zoom_level,(-500+map_scroll_y)/map_zoom_level,((-500+map_scroll_y)/map_zoom_level)+200/map_zoom_level)){
             planet_selected=4;
         }
-        if(mouse_b & 1 && !location_clicked((100+map_scroll_x)/map_zoom_level,((100+map_scroll_x)/map_zoom_level)+200/map_zoom_level,(1000+map_scroll_y)/map_zoom_level,((1000+map_scroll_y)/map_zoom_level)+200/map_zoom_level) && !location_clicked((700+map_scroll_x)/map_zoom_level,((700+map_scroll_x)/map_zoom_level)+200/map_zoom_level,(500+map_scroll_y)/map_zoom_level,((500+map_scroll_y)/map_zoom_level)+200/map_zoom_level) && !location_clicked((200+map_scroll_x)/map_zoom_level,((200+map_scroll_x)/map_zoom_level)+200/map_zoom_level,(2000+map_scroll_y)/map_zoom_level,((2000+map_scroll_y)/map_zoom_level)+200/map_zoom_level && !location_clicked((600+map_scroll_x)/map_zoom_level,((600+map_scroll_x)/map_zoom_level)+200/map_zoom_level,(-500+map_scroll_y)/map_zoom_level,((-500+map_scroll_y)/map_zoom_level)+200/map_zoom_level))){
+        if(mouse_b & 1 && !location_clicked((100+map_scroll_x)/map_zoom_level,((100+map_scroll_x)/map_zoom_level)+200/map_zoom_level,(1000+map_scroll_y)/map_zoom_level,((1000+map_scroll_y)/map_zoom_level)+200/map_zoom_level) && !location_clicked((700+map_scroll_x)/map_zoom_level,((700+map_scroll_x)/map_zoom_level)+200/map_zoom_level,(500+map_scroll_y)/map_zoom_level,((500+map_scroll_y)/map_zoom_level)+200/map_zoom_level) && !location_clicked((200+map_scroll_x)/map_zoom_level,((200+map_scroll_x)/map_zoom_level)+200/map_zoom_level,(2000+map_scroll_y)/map_zoom_level,((2000+map_scroll_y)/map_zoom_level)+200/map_zoom_level) && !location_clicked((600+map_scroll_x)/map_zoom_level,((600+map_scroll_x)/map_zoom_level)+200/map_zoom_level,(-500+map_scroll_y)/map_zoom_level,((-500+map_scroll_y)/map_zoom_level)+200/map_zoom_level) && !location_clicked(270,370,80,114)){
             planet_selected=0;
+        }
+        if(planet_selected!=0 && location_clicked(270,370,80,114)){
+            GAME_STATE=GAME;
         }
 
     }
