@@ -176,9 +176,15 @@ void draw(){
     if(GAME_STATE==SPACEMAP){
         draw_sprite(buffer, spacemap_space,map_scroll_x/map_zoom_level,map_scroll_y/map_zoom_level);
         draw_sprite(buffer, spacemap_space,0,0);
-        draw_sprite(buffer, spacemap_space,-3072+map_scroll_x/map_zoom_level,map_scroll_y/map_zoom_level);
-        draw_sprite(buffer, spacemap_space,-3072+map_scroll_x/map_zoom_level,-3072+map_scroll_y/map_zoom_level);
-        draw_sprite(buffer, spacemap_space,-3072+map_scroll_x/map_zoom_level,3072+map_scroll_y/map_zoom_level);
+        draw_sprite(buffer, spacemap_space,map_scroll_x/map_zoom_level,map_scroll_y/map_zoom_level);
+        draw_sprite(buffer, spacemap_space,map_scroll_x/map_zoom_level,-2304+(map_scroll_y/map_zoom_level));
+        draw_sprite(buffer, spacemap_space,map_scroll_x/map_zoom_level,2304+(map_scroll_y/map_zoom_level));
+        draw_sprite(buffer, spacemap_space,-3072+(map_scroll_x/map_zoom_level),map_scroll_y/map_zoom_level);
+        draw_sprite(buffer, spacemap_space,-3072+(map_scroll_x/map_zoom_level),-2304+(map_scroll_y/map_zoom_level));
+        draw_sprite(buffer, spacemap_space,-3072+(map_scroll_x/map_zoom_level),2304+(map_scroll_y/map_zoom_level));
+        draw_sprite(buffer, spacemap_space,3072+(map_scroll_x/map_zoom_level),map_scroll_y/map_zoom_level);
+        draw_sprite(buffer, spacemap_space,3072+(map_scroll_x/map_zoom_level),-2304+(map_scroll_y/map_zoom_level));
+        draw_sprite(buffer, spacemap_space,3072+(map_scroll_x/map_zoom_level),2304+(map_scroll_y/map_zoom_level));
 
         stretch_sprite(buffer, planet_darkmore,(100+map_scroll_x)/map_zoom_level,(1000+map_scroll_y)/map_zoom_level,200/map_zoom_level,200/map_zoom_level);
         stretch_sprite(buffer, planet_purplax,(700+map_scroll_x)/map_zoom_level,(500+map_scroll_y)/map_zoom_level,200/map_zoom_level,200/map_zoom_level);
