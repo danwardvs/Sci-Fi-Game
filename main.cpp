@@ -32,6 +32,7 @@ BITMAP* planet_heberion;
 BITMAP* spacemap_descriptor_background;
 BITMAP* spacemap_scanner;
 BITMAP* spacemap_set_course;
+BITMAP* spacemap_static;
 BITMAP* environment_darkmore;
 
 bool close_button_pressed;
@@ -49,6 +50,7 @@ int mouse_z_old;
 int planet_selected;
 float spacemap_scanner_angle;
 
+int static_step;
 int step;
 
 bool shooting;
@@ -101,10 +103,17 @@ void abort_on_error(const char *message){
 	 allegro_message("%s.\n %s\n", message, allegro_error);
 	 exit(-1);
 }
+bool joy_buttonpressed(){
+    bool buttonpressed=false;
+    for(int i=0; i<joy[0].num_buttons; i++)
+        if(joy[0].button[i].b)buttonpressed=true;
+    return buttonpressed;
+}
 
 void update(){
     poll_joystick();
     step++;
+    static_step++;
 
     if(GAME_STATE==GAME){
         if(key[KEY_TILDE])weapon=0;
@@ -127,24 +136,29 @@ void update(){
         }
     }
     if(GAME_STATE==SPACEMAP){
+
+        if(joy_buttonpressed())position_mouse(SCREEN_W/2,SCREEN_H/2);
         spacemap_scanner_angle+=0.2;
         if(spacemap_scanner_angle==255)spacemap_scanner_angle=0;
         if(mouse_z_old>mouse_z || joy[0].button[0].b && step>4){
             map_zoom_level++;
             step=0;
-            map_scroll_x+=10;
+            static_step=0;
+
         }
         if(mouse_z_old<mouse_z && map_zoom_level>1 || joy[0].button[3].b && step>4){
             map_zoom_level--;
             step=0;
+            static_step=0;
+
         }
         mouse_z_old=mouse_z;
         if(map_zoom_level==0)map_zoom_level=1;
 
-        if(mouse_x>SCREEN_W-40 || key[KEY_RIGHT] || joy[0].stick[0].axis[0].d2)map_scroll_x-=2*map_zoom_level;
-        if(mouse_x<40 || key[KEY_LEFT] || joy[0].stick[0].axis[0].d1)map_scroll_x+=2*map_zoom_level;
-        if(mouse_y>SCREEN_H-40 || key[KEY_DOWN] || joy[0].stick[0].axis[1].d2)map_scroll_y-=2*map_zoom_level;
-        if(mouse_y<40 || key[KEY_UP] || joy[0].stick[0].axis[1].d1)map_scroll_y+=2*map_zoom_level;
+        if(mouse_x>SCREEN_W-40 || key[KEY_RIGHT] || joy[0].stick[0].axis[0].d2)map_scroll_x-=4*map_zoom_level;
+        if(mouse_x<40 || key[KEY_LEFT] || joy[0].stick[0].axis[0].d1)map_scroll_x+=4*map_zoom_level;
+        if(mouse_y>SCREEN_H-40 || key[KEY_DOWN] || joy[0].stick[0].axis[1].d2)map_scroll_y-=4*map_zoom_level;
+        if(mouse_y<40 || key[KEY_UP] || joy[0].stick[0].axis[1].d1)map_scroll_y+=4*map_zoom_level;
 
         if(location_clicked((100+map_scroll_x)/map_zoom_level,((100+map_scroll_x)/map_zoom_level)+200/map_zoom_level,(1000+map_scroll_y)/map_zoom_level,((1000+map_scroll_y)/map_zoom_level)+200/map_zoom_level)){
             planet_selected=1;
@@ -240,6 +254,7 @@ void draw(){
             if(planet_selected==4)textprintf_ex(buffer,descriptor,45,75,makecol(255,0,0),-1,"Planet: Heberion");
         }
         rotate_sprite(buffer, spacemap_scanner, 512, -384, itofix(spacemap_scanner_angle));
+        if(static_step==0)draw_sprite(buffer, spacemap_static,0,0);
         draw_sprite(buffer, spacemap_overlay,0,0);
 
 
@@ -353,6 +368,9 @@ void setup(){
 
     if (!(environment_darkmore = load_bitmap("environment_darkmore.png", NULL)))
       abort_on_error("Cannot find image environment_darkmore.png\nPlease check your files and try again");
+
+    if (!(spacemap_static = load_bitmap("spacemap_static.png", NULL)))
+      abort_on_error("Cannot find image spacemap_static.png\nPlease check your files and try again");
 }
 
 
