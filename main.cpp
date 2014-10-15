@@ -132,6 +132,7 @@ void update(){
         if(mouse_z_old>mouse_z || joy[0].button[0].b && step>4){
             map_zoom_level++;
             step=0;
+            map_scroll_x+=10;
         }
         if(mouse_z_old<mouse_z && map_zoom_level>1 || joy[0].button[3].b && step>4){
             map_zoom_level--;
