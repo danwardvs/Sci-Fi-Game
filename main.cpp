@@ -90,7 +90,7 @@ int random(int newLowest, int newHighest)
 }
 
 bool location_clicked(int min_x,int max_x,int min_y,int max_y){
-    if(mouse_x>min_x && mouse_x<max_x && mouse_y>min_y && mouse_y<max_y && mouse_b & 1)
+    if(mouse_x>min_x && mouse_x<max_x && mouse_y>min_y && mouse_y<max_y && mouse_b & 1 || mouse_x>min_x && mouse_x<max_x && mouse_y>min_y && mouse_y<max_y && joy[0].button[1].b)
         return true;
     else return false;
 }
