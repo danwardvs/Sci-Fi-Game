@@ -222,8 +222,20 @@ void draw(){
                     textprintf_ex(buffer,descriptor_14,45,110,makecol(255,0,0),-1,"Temperature: -300'c");
                     textprintf_ex(buffer,descriptor_14,45,125,makecol(255,0,0),-1,"ETA: 120 min");
                     textprintf_ex(buffer,descriptor_14,45,140,makecol(255,0,0),-1,"Inhabitants: None");
+                    textprintf_ex(buffer,descriptor_14,45,160,makecol(255,0,0),-1,"\"There's nothing on");
+                    textprintf_ex(buffer,descriptor_14,45,175,makecol(255,0,0),-1,"this frozen");
+                    textprintf_ex(buffer,descriptor_14,45,190,makecol(255,0,0),-1,"rock.\"-Capitan");
             }
-            if(planet_selected==2)textprintf_ex(buffer,descriptor,45,75,makecol(255,0,0),-1,"Planet: Purplax");
+            if(planet_selected==2){
+                textprintf_ex(buffer,descriptor,45,75,makecol(255,0,0),-1,"Planet: Purplax");
+                textprintf_ex(buffer,descriptor_14,45,95,makecol(255,0,0),-1,"Atmosphere: Oxygen");
+                textprintf_ex(buffer,descriptor_14,45,110,makecol(255,0,0),-1,"Temperature: -70'c");
+                textprintf_ex(buffer,descriptor_14,45,125,makecol(255,0,0),-1,"ETA: 48 hours");
+                textprintf_ex(buffer,descriptor_14,45,140,makecol(255,0,0),-1,"Inhabitants: Natives");
+                textprintf_ex(buffer,descriptor_14,45,160,makecol(255,0,0),-1,"\"Don't drink the ");
+                textprintf_ex(buffer,descriptor_14,45,175,makecol(255,0,0),-1,"water!\"-James");
+
+            }
             if(planet_selected==3)textprintf_ex(buffer,descriptor,45,75,makecol(255,0,0),-1,"Planet: Nebula");
             if(planet_selected==4)textprintf_ex(buffer,descriptor,45,75,makecol(255,0,0),-1,"Planet: Heberion");
         }
